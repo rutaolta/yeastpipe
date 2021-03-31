@@ -1,0 +1,12 @@
+#---- Dirs ----
+sample_dir: "samples"
+trf_dir: "trf"
+log_dir: "logs"
+cluster_log_dir: "cluster_logs"
+conda_config: "workflow/envs/conda.yaml"
+#---- Threads ----
+trf_threads: 2
+#---- Time ----
+trf_time: "00:30:00"
+#---- Memory ----
+trf_mem_mb: 1000
