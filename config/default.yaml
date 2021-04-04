@@ -2,6 +2,7 @@
 sample_dir: "samples"
 trf_dir: "trf"
 log_dir: "logs"
+out_dir: "results"
 cluster_log_dir: "cluster_logs"
 conda_config: "workflow/envs/conda.yaml"
 #---- Threads ----
