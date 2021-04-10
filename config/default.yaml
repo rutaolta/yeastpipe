@@ -1,10 +1,12 @@
 #---- Dirs ----
+reference_dir: "reference"
 sample_dir: "samples"
-trf_dir: "trf"
-log_dir: "logs"
 out_dir: "results"
-cluster_log_dir: "cluster_logs"
+out_trf_dir: "results/trf"
+log_dir: "logs"
+
 conda_config: "workflow/envs/conda.yaml"
+
 #---- Threads ----
 trf_threads: 2
 #---- Time ----
