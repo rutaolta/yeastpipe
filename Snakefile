@@ -9,6 +9,8 @@ log_dir_path = Path(config["log_dir"])
 if "sample_list" not in config:
     config["sample_list"] = [d.name for d in sample_dir_path.iterdir() if d.is_dir()]
 
+localrules: all
+
 rule all:
     input:
         reference_path,
