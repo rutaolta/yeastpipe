@@ -1,9 +1,14 @@
 #---- Dirs ----
 reference_dir: "reference"
+reference_splitted_dir: "reference/splitted"
 sample_dir: "samples"
 out_dir: "results"
 out_trf_dir: "results/trf"
+out_gff_dir: "results/gff"
+out_wm_dir: "results/windowmasker"
+out_wm_counts_dir: "results/windowmasker/counts"
 log_dir: "logs"
+scripts_dir: "workflow/scripts"
 
 conda_config: "workflow/envs/conda.yaml"
 
