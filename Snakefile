@@ -15,6 +15,7 @@ out_trf_dir_path = Path(config["out_trf_dir"])
 out_gff_dir_path = Path(config["out_gff_dir"])
 out_wm_dir_path = Path(config["out_wm_dir"])
 out_wm_counts_dir_path = Path(config["out_wm_counts_dir"])
+out_repeatmasker_dir_path = Path(config["out_repeatmasker_dir"])
 log_dir_path = Path(config["log_dir"])
 scripts_dir_path = str(config["scripts_dir"])
 
@@ -31,7 +32,8 @@ rule all:
         expand(out_trf_dir_path / "{id}.dat", id=IDS),
         expand(out_gff_dir_path / "{id}.gff", id=IDS),
         expand(out_wm_counts_dir_path / "{id}.counts", id=IDS),
-        expand(out_wm_dir_path / "{id}.windowmasker", id=IDS)
+        expand(out_wm_dir_path / "{id}.windowmasker", id=IDS),
+        out_repeatmasker_dir_path / "file_list.txt"
 
 #### load rules #####
 
@@ -40,3 +42,4 @@ include: "workflow/rules/trf.smk"
 include: "workflow/rules/gff.smk"
 include: "workflow/rules/wm_counts.smk"
 include: "workflow/rules/wm_windowmasker.smk"
+include: "workflow/rules/repeatmasker.smk"

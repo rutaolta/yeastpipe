@@ -7,6 +7,7 @@ out_trf_dir: "results/trf"
 out_gff_dir: "results/gff"
 out_wm_dir: "results/windowmasker"
 out_wm_counts_dir: "results/windowmasker/counts"
+out_repeatmasker_dir: "results/repeatmasker"
 log_dir: "logs"
 scripts_dir: "workflow/scripts"
 
