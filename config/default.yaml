@@ -1,13 +1,17 @@
 #---- Dirs ----
 reference_dir: "reference"
 reference_splitted_dir: "reference/splitted"
-sample_dir: "samples"
-out_dir: "results"
+
 out_trf_dir: "results/trf"
-out_gff_dir: "results/gff"
 out_wm_dir: "results/windowmasker"
-out_wm_counts_dir: "results/windowmasker/counts"
-out_repeatmasker_dir: "results/repeatmasker"
+out_rm_dir: "results/repeatmasker"
+
+out_gff_trf_dir: "results/gff/trf"
+out_gff_wm_dir: "results/gff/windowmasker"
+out_gff_rm_dir: "results/gff/repeatmasker"
+out_gff_merged_dir: "results/gff/merged"
+out_bedtools_dir: "results/bedtools"
+
 log_dir: "logs"
 scripts_dir: "workflow/scripts"
 
