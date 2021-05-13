@@ -1,11 +1,11 @@
 rule split_fasta:
     input:
-        reference_dir_path / "S288C_reference_2015.fasta"
+        expand(samples_dir_path / "{sample}.fasta", sample=SAMPLES)
     output:
-        reference_splitted_dir_path / "file_list.txt"
+        samples_splitted_dir_path / "scaffold_list.txt"
     log:
-        log_dir_path / "split_fasta.log"
+        std=log_dir_path / "split_fasta.log"
     # conda:
     #     "../envs/conda.yaml"
-    script:
-        "../scripts/split_fasta.py"
+    shell:
+        "python workflow/scripts/split_fasta.py -i {input} -o {output} 2>&1"

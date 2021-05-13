@@ -1,14 +1,15 @@
 rule merge_gff:
     input:
-        expand(out_gff_trf_dir_path / "{id}.gff", id=IDS),
-        expand(out_gff_wm_dir_path / "{id}.gff", id=IDS),
-        expand(out_gff_rm_dir_path / "{id}.gff", id=IDS)
+        out_gff_trf_dir_path / "{sample}.gff",
+        out_gff_wm_dir_path / "{sample}.gff",
+        out_gff_rm_dir_path / "{sample}.gff"
     output:
-        expand(out_gff_merged_dir_path / "{id}.gff", id=IDS)
-    log:
-        log_dir_path / "merged.log"
+        out_gff_merged_dir_path / "{sample}.gff"
+    # log:
+    #     log_dir_path / "merged.log"
     # conda:
     #    "../envs/conda.yaml"
-    run:
-        for f in IDS:
-            shell("cat {out_gff_trf_dir_path}/{f}.gff {out_gff_wm_dir_path}/{f}.gff {out_gff_rm_dir_path}/{f}.gff > {out_gff_merged_dir_path}/{f}.gff")
+    shell:
+        "cat {out_gff_trf_dir_path}/{wildcards.sample}.gff {out_gff_wm_dir_path}/{wildcards.sample}.gff {out_gff_rm_dir_path}/{wildcards.sample}.gff > {out_gff_merged_dir_path}/{wildcards.sample}.gff"
+
+# https://snakemake.readthedocs.io/en/stable/project_info/faq.html#can-the-output-of-a-rule-be-a-symlink

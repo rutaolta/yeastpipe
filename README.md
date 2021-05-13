@@ -4,4 +4,4 @@ source .bashrc
 
 conda activate snakemake
 
-snakemake --cores 1 --configfile config/default.yaml --use-conda
+snakemake -j --cores 8 --configfile config/default.yaml --forceall --use-conda

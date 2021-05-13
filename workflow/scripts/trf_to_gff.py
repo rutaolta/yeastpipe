@@ -1,26 +1,41 @@
 import re
-import dataclasses
-import os
 import sys
-import shutil
+import argparse
 
 # logging
-sys.stderr = open(snakemake.log[0], "w")
+# sys.stderr = open(snakemake.log[0], "w")
 
-input = os.path.dirname(snakemake.input[0])
-output = os.path.dirname(snakemake.output[0])
+'''
+function transforms TRF results in dat-format into gff-format and 
+merges all scaffolds into one .gff-file for each sample.
+'''
+def trf_to_gff(input, output, samples, scaffolds):
+    for _ in scaffolds:
+        sample = re.findall(r"(?=("+'|'.join(samples)+r"))", _)[0]
+        scaffold = _.replace(f'{sample}.', '')
+        pos_seqs = open(f'{input}/{_}.dat').read().split(scaffold)[1].split("\n")
+        
+        with open(output + "/" + f'{sample}.gff', 'a') as f:
+            for ps in pos_seqs[7:-1]:
+                if ps == '':
+                    break
+                data = ps.split(" ")
+                f.write(f'{scaffold}\ttrf\trepeat\t{data[0]}\t{data[1]}\t.\t.\t.\t{pos_seqs[4]}; period={data[2]}; num_copies={data[3]}; align_score={data[7]}; cons_seq={data[13]}\n')
 
-# input = 'results/trf/'
-# output = 'results/gff/trf/'
 
-for root, dirs, files in os.walk(input):
-  for file in files:
-    print(file)
-    if re.match('.*.dat$', file):
-      scaffold = re.search(r"^(.*?)\..*", file).group(1)
-      pos_seqs = open(input + "/" + file).read().split("Parameters: ")[1].split("\n")
+# parsing args
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input", required=True, help="dir for .dat files after TRF")
+parser.add_argument("-o", "--output", required=True, help="output dir for .gff file")
+parser.add_argument("-sm", "--samples", nargs='+', required=True, help="sample names")
+parser.add_argument("-sc", "--scaffolds", nargs='+', required=True, help="scaffold names")
 
-      with open(output + "/" + f'{scaffold}.gff', 'a') as f:
-          for ps in pos_seqs[3:-1]:
-              data = ps.split(" ")
-              f.write(f'{scaffold}\ttrf\trepeat\t{data[0]}\t{data[1]}\t.\t.\t.\t{pos_seqs[0]}; period={data[2]}; num_copies={data[3]}; align_score={data[7]}; cons_seq={data[13]}\n')
+args = parser.parse_args()
+
+infilepath = args.input
+outfilepath = args.output
+samples = args.samples
+scaffolds = args.scaffolds
+
+# call from .dat to .gff transormation function
+trf_to_gff(infilepath, outfilepath, samples, scaffolds)

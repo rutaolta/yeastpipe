@@ -1,25 +1,40 @@
 import re
-import dataclasses
-import os
 import sys
-import shutil
+import argparse
 
 # logging
-sys.stderr = open(snakemake.log[0], "w")
+# sys.stderr = open(snakemake.log[0], "w")
 
-input = os.path.dirname(snakemake.input[0])
-output = os.path.dirname(snakemake.output[0])
+'''
+function transforms TRF results in dat-format into gff-format and 
+merges all scaffolds into one .gff-file for each sample.
+'''
+def wm_to_gff(input, output):
+  file=open(input).read()
 
-# input = 'results/windowmasker/'
-# output = 'results/gff/windowmasker/'
+  seq_iter = map(lambda seq: seq.split("\n", 1), file.split(">"))
+  next(seq_iter)
 
-for root, dirs, files in os.walk(input):
-  for file in files:
-    if re.match('.*.windowmasker$', file):
-      scaffold = re.search(r"^(.*?)\..*", file).group(1)
-      pos_seqs = open(input + "/" + file).read().split("\n")
+  with open(output, 'a') as f:
+    while True:
+      try:
+        seq = next(seq_iter)
+        scaffold = seq[0].split(" ", 1)[0]
+        for ps in seq[1].split("\n")[:-1]:
+          data = re.search(r'(.*) - (.*)', ps)
+          f.write(f'{scaffold}\twindowmasker\trepeat\t{int(data.group(1))+1}\t{int(data.group(2))+1}\t.\t.\t.\t.\n')
+      except StopIteration:
+        break
 
-      with open(output + "/" + f'{scaffold}.gff', 'a') as f:
-          for ps in pos_seqs[1:-1]:
-              data = re.search(r'(.*) - (.*)', ps)
-              f.write(f'{scaffold}\twindowmasker\trepeat\t{data.group(1)}\t{data.group(2)}\t.\t.\t.\t.\n')
+# parsing args
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input", required=True, help="dir for .dat files after TRF")
+parser.add_argument("-o", "--output", required=True, help="output dir for .gff file")
+
+args = parser.parse_args()
+
+infilepath = args.input
+outfilepath = args.output
+
+# call from .dat to .gff transormation function
+wm_to_gff(infilepath, outfilepath)

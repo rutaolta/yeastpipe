@@ -1,6 +1,7 @@
 #---- Dirs ----
 reference_dir: "reference"
-reference_splitted_dir: "reference/splitted"
+samples_dir: "samples"
+samples_splitted_dir: "results/splitted"
 
 out_trf_dir: "results/trf"
 out_wm_dir: "results/windowmasker"
@@ -11,14 +12,20 @@ out_gff_wm_dir: "results/gff/windowmasker"
 out_gff_rm_dir: "results/gff/repeatmasker"
 out_gff_merged_dir: "results/gff/merged"
 out_bedtools_dir: "results/bedtools"
+out_lastdbal_dir: "results/lastdbal"
 
 log_dir: "logs"
 scripts_dir: "workflow/scripts"
 
 conda_config: "workflow/envs/conda.yaml"
 
+samples:
+    japonicus: samples/japonicus.fasta
+    octosporus: samples/octosporus.fasta
+    cerevisiae: samples/cerevisiae.fasta
+
 #---- Threads ----
-trf_threads: 2
+trf_threads: 8
 #---- Time ----
 trf_time: "00:30:00"
 #---- Memory ----
