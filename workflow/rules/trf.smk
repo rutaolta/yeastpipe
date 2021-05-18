@@ -1,13 +1,17 @@
 # SCAFFOLDS = get_scaffolds(samples_splitted_dir_path)
 # print(SCAFFOLDS)
 
+SCAFFOLDS = get_scaffolds(samples_splitted_dir_path)
+
 rule trf:
     input:
         samples_splitted_dir_path / "{scaffold}.fasta"
     output:
         out_trf_dir_path / "{scaffold}.dat"
-    # log:
-    #     log_dir_path / "trf.{scaffold}.log"
+    log:
+        std=log_dir_path / "{scaffold}.trf.log",
+        cluster_log=cluster_log_dir_path / "{scaffold}.trf.cluster.log",
+        cluster_err=cluster_log_dir_path / "{scaffold}.trf.cluster.err"
     # conda:
     #    "../envs/conda.yaml"
     threads: 8
@@ -18,8 +22,6 @@ rule trf:
         "trf ../splitted/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
         "mv {wildcards.scaffold}.fasta.2.7.7.80.10.50.2000.dat {wildcards.scaffold}.dat"
 
-SCAFFOLDS = get_scaffolds(samples_splitted_dir_path)
-
 rule trf_gff:
     input:
         # rules.trf.output
@@ -27,7 +29,9 @@ rule trf_gff:
     output:
         expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES)
     log:
-        log_dir_path / "trf.log"
+        std=log_dir_path / "trf_gff.log",
+        cluster_log=cluster_log_dir_path / "trf_gff.cluster.log",
+        cluster_err=cluster_log_dir_path / "trf_gff.cluster.err"
     # conda:
     #     "../envs/conda.yaml"
     params:

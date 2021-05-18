@@ -22,12 +22,14 @@ rule repeatmasker_threads:
         samples_dir_path / "{sample}.fasta"
     output:
         out_gff_rm_dir_path / "{sample}.gff"
-    # log:
-    #     log_dir_path / "repeatmasker.log"
-    threads: 8
+    log:
+        std=log_dir_path / "{sample}.repeatmasker_threads.log",
+        cluster_log=cluster_log_dir_path / "{sample}.repeatmasker_threads.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}.repeatmasker_threads.cluster.err"
+    threads: 16
     # conda:
     #    "../envs/conda.yaml"
     shell:
-        "RepeatMasker -pa 4 -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {samples_dir_path}/{wildcards.sample}.fasta -parallel 4 -gff -xsmall 2>&1; "
+        "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel 4 -gff -xsmall 2>&1; "
         "ex -sc '1d3|x' {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff; "
-        "mv {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff {out_gff_rm_dir_path}/{wildcards.sample}.gff"
+        "mv {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff {output}"

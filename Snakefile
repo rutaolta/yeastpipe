@@ -25,8 +25,10 @@ out_gff_merged_dir_path = Path(config["out_gff_merged_dir"])
 out_bedtools_dir_path = Path(config["out_bedtools_dir"])
 out_lastdbal_dir_path = Path(config["out_lastdbal_dir"])
 
-log_dir_path = Path(config["log_dir"])
 scripts_dir_path = str(config["scripts_dir"])
+
+log_dir_path = Path(config["log_dir"])
+cluster_log_dir_path = Path(config["cluster_log_dir"])
 
 def get_scaffolds(mypath):
     _, _, filenames = next(walk(mypath))
@@ -52,8 +54,7 @@ rule all:
     input:
         log_dir_path,
         samples_splitted_dir_path / "scaffold_list.txt",
-        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES)
-        dynamic(expand(samples_splitted_dir_path / "{sample}.{scaffold}.fasta", sample=SAMPLES))
+        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_wm_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_rm_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_merged_dir_path / "{sample}.gff", sample=SAMPLES),

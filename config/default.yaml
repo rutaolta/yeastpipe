@@ -14,8 +14,10 @@ out_gff_merged_dir: "results/gff/merged"
 out_bedtools_dir: "results/bedtools"
 out_lastdbal_dir: "results/lastdbal"
 
-log_dir: "logs"
 scripts_dir: "workflow/scripts"
+
+log_dir: "logs"
+cluster_log_dir: "cluster_logs"
 
 conda_config: "workflow/envs/conda.yaml"
 
@@ -23,6 +25,8 @@ samples:
     japonicus: samples/japonicus.fasta
     octosporus: samples/octosporus.fasta
     cerevisiae: samples/cerevisiae.fasta
+
+reference: reference/cerevisiae.fasta
 
 #---- Threads ----
 trf_threads: 8

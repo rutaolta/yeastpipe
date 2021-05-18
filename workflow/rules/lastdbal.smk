@@ -2,25 +2,31 @@ rule lastdb:
     input:
         out_bedtools_dir_path / "{sample}.fasta"
     output:
-        temp(out_wm_dir_path / "counts/{sample}.counts")
-    # log:
-    #     log_dir_path / "windowmasker.{sample}.log"
+        temp(out_lastdbal_dir_path / "{sample}.YASS.R11.soft")
+    log:
+        std=log_dir_path / "{sample}.lastdb.log",
+        cluster_log=cluster_log_dir_path / "{sample}.lastdb.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}.lastdb.cluster.err"
 #    conda:
 #        "workflow/envs/conda.yaml"
-    threads: 8
+    threads: 16
     shell:
-        "lastdb -c -R11 -P {threads} -u YASS -R11 {wildcards.sample}.YASS.R11.soft {out_bedtools_dir_path}/{wildcards.sample}.fasta 2>&1"
-        # lastdb -c -R11 -P 8 -u YASS -R11 results/bedtools/octosporus.fasta
+        "lastdb -c -R11 -P {threads} -u YASS {output} {input} 2>&1"
 
 rule lastal:
     input:
-        out_bedtools_dir_path / "{sample}.fasta"
+        lastdb=out_lastdbal_dir_path / "{sample}.YASS.R11.soft"
     output:
-        out_lastdbal_dir_path / "{sample}.R11.maf",
-        out_lastdbal_dir_path / "{sample}.R11.tab"
-    # log:
-    #     log_dir_path / "windowmasker.log"
+        maf=out_lastdbal_dir_path / "{sample}.R11.maf",
+        tab=out_lastdbal_dir_path / "{sample}.R11.tab"
+    params:
+        ref=config["reference"]
+    log:
+        std=log_dir_path / "{sample}.lastal.log",
+        cluster_log=cluster_log_dir_path / "{sample}.lastal.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}.lastal.cluster.err"
 #    conda:
 #        "workflow/envs/conda.yaml"
+    threads: 16
     shell:
-        "lastal -P 15 -R11 -f MAF -i 4G {wildcards.sample}.YASS.R11.soft {out_bedtools_dir_path}/{wildcards.sample}.fasta | tee {wildcards.sample}.R11.maf | maf-convert tab > {wildcards.sample}.R11.tab 2>&1"
+        "lastal -P {threads} -R11 -f MAF -i 4G {input.lastdb} {params.ref} | tee {output.maf} | maf-convert tab > {output.tab} 2>&1"
