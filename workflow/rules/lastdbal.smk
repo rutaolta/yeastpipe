@@ -9,7 +9,12 @@ rule lastdb:
         cluster_err=cluster_log_dir_path / "{sample}.lastdb.cluster.err"
 #    conda:
 #        "workflow/envs/conda.yaml"
-    threads: 16
+    resources:
+        cpus=config["lastdb_threads"],
+        time=config["lastdb_time"],
+        mem=config["lastdb_mem_mb"]
+    threads: 
+        config["lastdb_threads"]
     shell:
         "lastdb -c -R11 -P {threads} -u YASS {output} {input} 2>&1"
 
@@ -27,6 +32,11 @@ rule lastal:
         cluster_err=cluster_log_dir_path / "{sample}.lastal.cluster.err"
 #    conda:
 #        "workflow/envs/conda.yaml"
-    threads: 16
+    resources:
+        cpus=config["lastal_threads"],
+        time=config["lastal_time"],
+        mem=config["lastal_mem_mb"]
+    threads: 
+        config["lastal_threads"]
     shell:
         "lastal -P {threads} -R11 -f MAF -i 4G {input.lastdb} {params.ref} | tee {output.maf} | maf-convert tab > {output.tab} 2>&1"

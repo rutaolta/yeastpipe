@@ -26,9 +26,14 @@ rule repeatmasker_threads:
         std=log_dir_path / "{sample}.repeatmasker_threads.log",
         cluster_log=cluster_log_dir_path / "{sample}.repeatmasker_threads.cluster.log",
         cluster_err=cluster_log_dir_path / "{sample}.repeatmasker_threads.cluster.err"
-    threads: 16
     # conda:
     #    "../envs/conda.yaml"
+    resources:
+        cpus=config["repeatmasker_threads"],
+        time=config["repeatmasker_time"],
+        mem=config["repeatmasker_mem_mb"]
+    threads: 
+        config["repeatmasker_threads"]
     shell:
         "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel 4 -gff -xsmall 2>&1; "
         "ex -sc '1d3|x' {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff; "

@@ -14,9 +14,12 @@ rule trf:
         cluster_err=cluster_log_dir_path / "{scaffold}.trf.cluster.err"
     # conda:
     #    "../envs/conda.yaml"
-    threads: 8
     resources:
-        cpus=config["trf_threads"]
+        cpus=config["trf_threads"],
+        time=config["trf_time"],
+        mem=config["trf_mem_mb"]
+    threads: 
+        config["trf_threads"]
     shell:
         "cd {out_trf_dir_path}/; "
         "trf ../splitted/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
@@ -39,6 +42,12 @@ rule trf_gff:
         scaffolds = SCAFFOLDS,
         inpdir = out_trf_dir_path,
         outdir = out_gff_trf_dir_path
+    resources:
+        cpus=config["trf_gff_threads"],
+        time=config["trf_gff_time"],
+        mem=config["trf_gff_mem_mb"]
+    threads:
+        config["trf_gff_threads"]
     shell:
         "python workflow/scripts/trf_to_gff.py -i {params.inpdir} -o {params.outdir} -sm {params.samples} -sc {params.scaffolds} 2>&1"
     # script:

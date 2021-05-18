@@ -9,5 +9,11 @@ rule split_fasta:
         cluster_err=cluster_log_dir_path / "split_fasta.cluster.err"
     # conda:
     #     "../envs/conda.yaml"
+    resources:
+        cpus=config["split_fasta_threads"],
+        time=config["split_fasta_time"],
+        mem=config["split_fasta_mem_mb"]
+    threads: 
+        config["split_fasta_threads"]
     shell:
         "python workflow/scripts/split_fasta.py -i {input} -o {output} 2>&1"

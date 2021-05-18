@@ -11,6 +11,12 @@ rule merge_gff:
         cluster_err=cluster_log_dir_path / "{sample}.merge_gff.cluster.err"
     # conda:
     #    "../envs/conda.yaml"
+    resources:
+        cpus=config["merge_gff_threads"],
+        time=config["merge_gff_time"],
+        mem=config["merge_gff_mem_mb"]
+    threads: 
+        config["merge_gff_threads"]
     shell:
         "cat {input.trf} {input.wm} {input.rm} > {output}"
 
