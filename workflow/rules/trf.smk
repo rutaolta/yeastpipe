@@ -1,17 +1,32 @@
-# SCAFFOLDS = get_scaffolds(samples_splitted_dir_path)
-# print(SCAFFOLDS)
-
-SCAFFOLDS = get_scaffolds(samples_splitted_dir_path)
+checkpoint split_fasta:
+    input:
+        samples_dir_path / "{sample}.fasta"
+    output:
+        directory(samples_splitted_dir_path / "{sample}")
+    log:
+        std=log_dir_path / "{sample}.split_fasta.log",
+        cluster_log=cluster_log_dir_path / "{sample}.split_fasta.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}.split_fasta.cluster.err"
+    # conda:
+    #     "../envs/conda.yaml"
+    resources:
+        cpus=config["split_fasta_threads"],
+        time=config["split_fasta_time"],
+        mem=config["split_fasta_mem_mb"]
+    threads: 
+        config["split_fasta_threads"]
+    shell:
+        "python workflow/scripts/split_fasta.py -i {input} -o {output} 2>&1"
 
 rule trf:
     input:
-        samples_splitted_dir_path / "{scaffold}.fasta"
+        samples_splitted_dir_path / "{sample}/{scaffold}.fasta"
     output:
-        out_trf_dir_path / "{scaffold}.dat"
+        out_trf_dir_path / "{sample}/{scaffold}.dat"
     log:
-        std=log_dir_path / "{scaffold}.trf.log",
-        cluster_log=cluster_log_dir_path / "{scaffold}.trf.cluster.log",
-        cluster_err=cluster_log_dir_path / "{scaffold}.trf.cluster.err"
+        std=log_dir_path / "{sample}/{scaffold}.trf.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{scaffold}.trf.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{scaffold}.trf.cluster.err"
     # conda:
     #    "../envs/conda.yaml"
     resources:
@@ -22,26 +37,26 @@ rule trf:
         config["trf_threads"]
     shell:
         "cd {out_trf_dir_path}/; "
-        "trf ../splitted/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
-        "mv {wildcards.scaffold}.fasta.2.7.7.80.10.50.2000.dat {wildcards.scaffold}.dat"
+        "trf ../splitted/{wildcards.sample}/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
+        "mv {wildcards.sample}/{wildcards.scaffold}.fasta.2.7.7.80.10.50.2000.dat {wildcards.sample}/{wildcards.scaffold}.dat"
+
+def trf_gff_input(wildcards):
+    checkpoint_output = checkpoints.split_fasta.get(**wildcards).output[0]
+    return expand(out_trf_dir_path / "{sample}/{scaffold}.dat",
+           sample=wildcards.sample,
+           scaffold=glob_wildcards(os.path.join(checkpoint_output, "{scaffold}.dat")).scaffold)
 
 rule trf_gff:
     input:
-        # rules.trf.output
-        expand(out_trf_dir_path / "{scaffold}.dat", scaffold=SCAFFOLDS)
+        trf_gff_input
     output:
-        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES)
+        out_gff_trf_dir_path / "{sample}.gff"
     log:
-        std=log_dir_path / "trf_gff.log",
-        cluster_log=cluster_log_dir_path / "trf_gff.cluster.log",
-        cluster_err=cluster_log_dir_path / "trf_gff.cluster.err"
+        std=log_dir_path / "{sample}.trf_gff.log",
+        cluster_log=cluster_log_dir_path / "{sample}.trf_gff.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}.trf_gff.cluster.err"
     # conda:
     #     "../envs/conda.yaml"
-    params:
-        samples = SAMPLES,
-        scaffolds = SCAFFOLDS,
-        inpdir = out_trf_dir_path,
-        outdir = out_gff_trf_dir_path
     resources:
         cpus=config["trf_gff_threads"],
         time=config["trf_gff_time"],
@@ -49,6 +64,4 @@ rule trf_gff:
     threads:
         config["trf_gff_threads"]
     shell:
-        "python workflow/scripts/trf_to_gff.py -i {params.inpdir} -o {params.outdir} -sm {params.samples} -sc {params.scaffolds} 2>&1"
-    # script:
-    #     "../scripts/trf_to_gff.py"
+        "python workflow/scripts/trf_to_gff.py -i {input} -o {output} 2>&1"
