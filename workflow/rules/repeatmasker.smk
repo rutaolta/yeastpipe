@@ -21,7 +21,7 @@ rule repeatmasker_threads:
     input:
         samples_dir_path / "{sample}.fasta"
     output:
-        out_gff_rm_dir_path / "{sample}.gff"
+        gff=out_gff_rm_dir_path / "{sample}.gff"
     log:
         std=log_dir_path / "{sample}.repeatmasker_threads.log",
         cluster_log=cluster_log_dir_path / "{sample}.repeatmasker_threads.cluster.log",
@@ -34,7 +34,13 @@ rule repeatmasker_threads:
         mem=config["repeatmasker_mem_mb"]
     threads: 
         config["repeatmasker_threads"]
+    params:
+        parallel=config["repeatmasker_threads"] / 4
+        gff="{out_rm_dir_path}/{wildcards.sample}.fasta.out.gff"
+        fasta="{out_rm_dir_path}/{wildcards.sample}.fasta.out"
+        tar="{out_rm_dir_path}/{wildcards.sample}.fasta.out.tar.gz"
     shell:
-        "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel 4 -gff -xsmall 2>&1; "
-        "ex -sc '1d3|x' {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff; "
-        "mv {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff {output}"
+        "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel {params.parallel} -gff -xsmall 2>&1; "
+        "ex -sc '1d3|x' {params.gff}; "
+        "mv {params.gff} {output.gff}; "
+        "tar -czvf {params.tar} {params.fasta} && rm {params.fasta}"

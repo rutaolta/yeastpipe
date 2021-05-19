@@ -59,8 +59,8 @@ rule all:
         expand(out_gff_rm_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_merged_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_bedtools_dir_path / "{sample}.fasta", sample=SAMPLES),
-        expand(out_lastdbal_dir_path / "{sample}.R11.maf", sample=SAMPLES),
-        expand(out_lastdbal_dir_path / "{sample}.R11.tab", sample=SAMPLES)
+        expand(out_lastdbal_dir_path / "{sample}.R11.maf.tar.gz", sample=SAMPLES),
+        expand(out_lastdbal_dir_path / "{sample}.R11.tab.tar.gz", sample=SAMPLES)
 
 #### load rules #####
 include: "workflow/rules/split_fasta.smk"

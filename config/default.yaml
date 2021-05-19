@@ -40,6 +40,7 @@ bedtools_sort_threads: 16
 bedtools_threads: 16
 lastdb_threads: 16
 lastal_threads: 16
+last_tar_threads: 1
 
 #---- Time ----
 trf_time: "00:30:00"
@@ -54,6 +55,7 @@ bedtools_sort_time: "00:10:00"
 bedtools_time: "00:30:00"
 lastdb_time: "00:30:00"
 lastal_time: "00:30:00"
+last_tar_time: "00:05:00"
 
 #---- Memory ----
 trf_mem_mb: 1000
@@ -68,3 +70,4 @@ bedtools_sort_mem_mb: 1000
 bedtools_mem_mb: 1000
 lastdb_mem_mb: 1000
 lastal_mem_mb: 1000
+last_tar_mem_mb: 1000
