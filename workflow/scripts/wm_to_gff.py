@@ -28,8 +28,8 @@ def wm_to_gff(input, output):
 
 # parsing args
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--input", required=True, help="dir for .dat files after TRF")
-parser.add_argument("-o", "--output", required=True, help="output dir for .gff file")
+parser.add_argument("-i", "--input", required=True, help=".windowmasker files")
+parser.add_argument("-o", "--output", required=True, help=".gff files")
 
 args = parser.parse_args()
 

@@ -35,12 +35,9 @@ rule repeatmasker_threads:
     threads: 
         config["repeatmasker_threads"]
     params:
-        parallel=config["repeatmasker_threads"] / 4
-        gff="{out_rm_dir_path}/{wildcards.sample}.fasta.out.gff"
-        fasta="{out_rm_dir_path}/{wildcards.sample}.fasta.out"
-        tar="{out_rm_dir_path}/{wildcards.sample}.fasta.out.tar.gz"
+        parallel=int(config["repeatmasker_threads"] / 4)
     shell:
         "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel {params.parallel} -gff -xsmall 2>&1; "
-        "ex -sc '1d3|x' {params.gff}; "
-        "mv {params.gff} {output.gff}; "
-        "tar -czvf {params.tar} {params.fasta} && rm {params.fasta}"
+        "ex -sc '1d3|x' {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff; "
+        "mv {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff {output.gff}; "
+        "tar -czvf {out_rm_dir_path}/{wildcards.sample}.fasta.out.tar.gz {out_rm_dir_path}/{wildcards.sample}.fasta.out && rm {out_rm_dir_path}/{wildcards.sample}.fasta.out"

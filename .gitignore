@@ -50,6 +50,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 logs/
+cluster_logs
 
 # Unit test / coverage reports
 htmlcov/

@@ -2,13 +2,15 @@ rule lastdb:
     input:
         out_bedtools_dir_path / "{sample}.fasta"
     output:
-        temp(out_lastdbal_dir_path / "{sample}.YASS.R11.soft")
+        temp(directory(out_lastdbal_dir_path / "{sample}"))
     log:
         std=log_dir_path / "{sample}.lastdb.log",
         cluster_log=cluster_log_dir_path / "{sample}.lastdb.cluster.log",
         cluster_err=cluster_log_dir_path / "{sample}.lastdb.cluster.err"
 #    conda:
 #        "workflow/envs/conda.yaml"
+    params:
+        prefix="YASS.R11.soft"
     resources:
         cpus=config["lastdb_threads"],
         time=config["lastdb_time"],
@@ -16,16 +18,17 @@ rule lastdb:
     threads: 
         config["lastdb_threads"]
     shell:
-        "lastdb -c -R11 -P {threads} -u YASS {output} {input} 2>&1"
+        "mkdir {output}; lastdb -c -R11 -P {threads} -u YASS {output}/{params.prefix} {input} 2>&1"
 
 rule lastal:
     input:
-        lastdb=out_lastdbal_dir_path / "{sample}.YASS.R11.soft"
+        lastdb=directory(out_lastdbal_dir_path / "{sample}")
     output:
         maf=temp(out_lastdbal_dir_path / "{sample}.R11.maf"),
         tab=temp(out_lastdbal_dir_path / "{sample}.R11.tab")
     params:
-        ref=config["reference"]
+        ref=config["reference"],
+        prefix="YASS.R11.soft"
     log:
         std=log_dir_path / "{sample}.lastal.log",
         cluster_log=cluster_log_dir_path / "{sample}.lastal.cluster.log",
@@ -39,7 +42,7 @@ rule lastal:
     threads: 
         config["lastal_threads"]
     shell:
-        "lastal -P {threads} -R11 -f MAF -i 4G {input.lastdb} {params.ref} | tee {output.maf} | maf-convert tab > {output.tab} 2>&1"
+        "lastal -P {threads} -R11 -f MAF -i 4G {input.lastdb}/{params.prefix} {params.ref} | tee {output.maf} | maf-convert tab > {output.tab} 2>&1"
 
 rule last_tar:
     input:
@@ -55,5 +58,5 @@ rule last_tar:
     threads: 
         config["last_tar_threads"]
     shell:
-        "tar -czvf {output.maf_tar} {input.maf}; "
-        "tar -czvf {output.tab_tar} {input.tab}"
+        "tar -czvf {output.maf_tar} {input.maf} && rm {input.maf}; "
+        "tar -czvf {output.tab_tar} {input.tab} && rm {input.tab}"

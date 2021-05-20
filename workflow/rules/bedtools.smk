@@ -2,7 +2,7 @@ rule bedtools_sort:
     input:
         out_gff_merged_dir_path / "{sample}.gff"
     output:
-        out_gff_merged_dir_path / "{sample}.gff"
+        out_gff_merged_dir_path / "{sample}.sorted.gff"
     log:
         std=log_dir_path / "{sample}.bedtools_sort.log",
         cluster_log=cluster_log_dir_path / "{sample}.bedtools_sort.cluster.log",
@@ -16,12 +16,12 @@ rule bedtools_sort:
     threads: 
         config["bedtools_sort_threads"]
     shell:
-        "bedtools sort -i {input} 2>&1"
+        "bedtools sort -i {input} > {output} 2>&1"
 
 rule bedtools:
     input:
         samples=samples_dir_path / "{sample}.fasta",
-        gff=out_gff_merged_dir_path / "{sample}.gff"
+        gff=out_gff_merged_dir_path / "{sample}.sorted.gff"
     output:
         out_bedtools_dir_path / "{sample}.fasta"
     log:

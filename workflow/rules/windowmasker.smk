@@ -44,9 +44,6 @@ rule wm_gff:
         out_wm_dir_path / "{sample}.windowmasker"
     output:
         out_gff_wm_dir_path / "{sample}.gff"
-    # params:
-    #     inpdir = out_wm_dir_path,
-    #     outdir = out_gff_wm_dir_path
     log:
         std=log_dir_path / "{sample}.wm_gff.log",
         cluster_log=cluster_log_dir_path / "{sample}.wm_gff.cluster.log",
@@ -60,4 +57,4 @@ rule wm_gff:
     threads: 
         config["wm_gff_threads"]
     script:
-        "python workflow/scripts/wm_to_gff.py -i {input} -o {output}" #-sm {wildcards.sample}
+        "python workflow/scripts/wm_to_gff.py -i {input} -o {output} 2>&1"
