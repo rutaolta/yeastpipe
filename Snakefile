@@ -42,7 +42,8 @@ SAMPLES = get_scaffolds(samples_dir_path)
 rule all:
     input:
         log_dir_path,
-        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES),
+        cluster_log_dir_path,
+        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES)
         expand(out_gff_wm_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_rm_dir_path / "{sample}.gff", sample=SAMPLES),
         expand(out_gff_merged_dir_path / "{sample}.gff", sample=SAMPLES),

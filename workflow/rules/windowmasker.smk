@@ -60,4 +60,4 @@ rule wm_gff:
     threads: 
         config["wm_gff_threads"]
     script:
-        "../scripts/wm_to_gff.py -i {input} -o {output}" #-sm {wildcards.sample}
+        "python workflow/scripts/wm_to_gff.py -i {input} -o {output}" #-sm {wildcards.sample}

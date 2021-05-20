@@ -22,10 +22,10 @@ cluster_log_dir: "cluster_logs"
 conda_config: "workflow/envs/conda.yaml"
 
 samples:
-    japonicus: samples/japonicus.fasta
-    octosporus: samples/octosporus.fasta
+    japonicus: "samples/japonicus.fasta"
+    octosporus: "samples/octosporus.fasta"
 
-reference: reference/cerevisiae.fasta
+reference: "reference/cerevisiae.fasta"
 
 #---- Threads ----
 trf_threads: 16

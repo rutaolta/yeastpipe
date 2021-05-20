@@ -9,11 +9,9 @@ returns the output file with resulting scaffolds list in format <{sample} : {sca
 and splitted .fasta files
 """
 def split_fasta(input, output):
-    output_dir = output
-
     file=open(input).read()
     try:
-        mkdir(output_dir)
+        mkdir(output)
     except FileExistsError:
         pass
 
@@ -24,7 +22,7 @@ def split_fasta(input, output):
         try:
             seq = next(seq_iter)
             scaffold = seq[0].split(" ", 1)[0]
-            filename = f'{output_dir}/{scaffold}.fasta'
+            filename = f'{output}/{scaffold}.fasta'
             with open(filename, 'a') as f:
                 f.write(f'>{scaffold}\n{seq[1]}')
         except StopIteration:
