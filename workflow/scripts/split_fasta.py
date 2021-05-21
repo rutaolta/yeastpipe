@@ -42,5 +42,4 @@ infilepath = args.input
 outfilepath = args.output
 
 # call spliting function for given input fasta-files
-for input in infilepath:
-    split_fasta(input, outfilepath)
+split_fasta(infilepath, outfilepath)

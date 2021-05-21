@@ -36,9 +36,9 @@ rule trf:
     threads: 
         config["trf_threads"]
     shell:
-        "cd {out_trf_dir_path}/; "
-        "trf ../splitted/{wildcards.sample}/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
-        "mv {wildcards.sample}/{wildcards.scaffold}.fasta.2.7.7.80.10.50.2000.dat {wildcards.sample}/{wildcards.scaffold}.dat"
+        "mkdir -p {out_trf_dir_path}/{wildcards.sample}; cd {out_trf_dir_path}/{wildcards.sample}; "
+        "trf ../../splitted/{wildcards.sample}/{wildcards.scaffold}.fasta 2 7 7 80 10 50 2000 -l 10 -d -h; "
+        "mv {wildcards.scaffold}.fasta.2.7.7.80.10.50.2000.dat {wildcards.scaffold}.dat"
 
 def trf_gff_input(wildcards):
     checkpoint_output = checkpoints.split_fasta.get(**wildcards).output[0]
