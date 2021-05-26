@@ -1,8 +1,13 @@
+# import trf, windowmasker, repeatmasker
+
 rule merge_gff:
     input:
         trf=out_gff_trf_dir_path / "{sample}.gff",
         wm=out_gff_wm_dir_path / "{sample}.gff",
         rm=out_gff_rm_dir_path / "{sample}.gff"
+        # trf=trf.rules.trf_gff.output,
+        # wm=windowmasker.rules.wm_gff.output,
+        # rm=repeatmasker.rules.rm_gff.output
     output:
         out_gff_merged_dir_path / "{sample}.gff"
     log:

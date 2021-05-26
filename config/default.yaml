@@ -27,6 +27,8 @@ samples:
 
 reference: "reference/cerevisiae.fasta"
 
+species: "Saccharomyces cerevisiae"
+
 #---- Threads ----
 split_fasta_threads: 1
 trf_threads: 16

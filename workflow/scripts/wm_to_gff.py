@@ -9,22 +9,26 @@ import argparse
 function transforms TRF results in dat-format into gff-format and 
 merges all scaffolds into one .gff-file for each sample.
 '''
+
+
 def wm_to_gff(input, output):
-  file=open(input).read()
+    file = open(input).read()
 
-  seq_iter = map(lambda seq: seq.split("\n", 1), file.split(">"))
-  next(seq_iter)
+    seq_iter = map(lambda seq: seq.split("\n", 1), file.split(">"))
+    next(seq_iter)
 
-  with open(output, 'a') as f:
-    while True:
-      try:
-        seq = next(seq_iter)
-        scaffold = seq[0].split(" ", 1)[0]
-        for ps in seq[1].split("\n")[:-1]:
-          data = re.search(r'(.*) - (.*)', ps)
-          f.write(f'{scaffold}\twindowmasker\trepeat\t{int(data.group(1))+1}\t{int(data.group(2))+1}\t.\t.\t.\t.\n')
-      except StopIteration:
-        break
+    with open(output, 'a') as f:
+        while True:
+            try:
+                seq = next(seq_iter)
+                scaffold = seq[0].split(" ", 1)[0]
+                for ps in seq[1].split("\n")[:-1]:
+                    data = re.search(r'(.*) - (.*)', ps)
+                    f.write(
+                        f'{scaffold}\twindowmasker\trepeat\t{int(data.group(1)) + 1}\t{int(data.group(2)) + 1}\t.\t.\t.\t.\n')
+            except StopIteration:
+                break
+
 
 # parsing args
 parser = argparse.ArgumentParser()

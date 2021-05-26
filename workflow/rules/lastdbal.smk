@@ -25,11 +25,11 @@ rule lastdb:
     threads: 
         config["lastdb_threads"]
     shell:
-        "lastdb -c -R11 -P {threads} -u YASS {output}/{params.prefix} {input} 2>&1"
+        "lastdb -c -R11 -P {threads} -u YASS {output.dir}/{params.prefix} {input} 2>&1"
 
 rule lastal:
     input:
-        lastdb=directory(out_lastdbal_dir_path / "{sample}")
+        lastdb=rules.lastdb.output.dir
     output:
         maf=temp(out_lastdbal_dir_path / "{sample}.R11.maf"),
         tab=temp(out_lastdbal_dir_path / "{sample}.R11.tab")
@@ -53,8 +53,8 @@ rule lastal:
 
 rule last_tar:
     input:
-        maf=out_lastdbal_dir_path / "{sample}.R11.maf",
-        tab=out_lastdbal_dir_path / "{sample}.R11.tab"
+        maf=rules.lastal.output.maf,
+        tab=rules.lastal.output.tab
     output:
         maf=out_lastdbal_dir_path / "{sample}.R11.maf.gz",
         tab=out_lastdbal_dir_path / "{sample}.R11.tab.gz"

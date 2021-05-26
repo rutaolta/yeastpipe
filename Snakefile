@@ -37,13 +37,13 @@ def get_scaffolds(mypath):
 SAMPLES = get_scaffolds(samples_dir_path)
 
 ##### target rules #####
-# localrules: all
+localrules: all
 
 rule all:
     input:
         expand(
             (
-                out_gff_trf_dir_path / "{sample}.gff"
+                out_gff_trf_dir_path / "{sample}.gff",
                 out_gff_wm_dir_path / "{sample}.gff",
                 out_gff_rm_dir_path / "{sample}.gff",
                 out_gff_merged_dir_path / "{sample}.gff",

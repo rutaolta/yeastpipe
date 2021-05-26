@@ -8,8 +8,10 @@ function splits given input fasta into separate files by scaffolds.
 returns the output file with resulting scaffolds list in format <{sample} : {scaffold}>
 and splitted .fasta files
 """
+
+
 def split_fasta(input, output):
-    file=open(input).read()
+    file = open(input).read()
     try:
         mkdir(output)
     except FileExistsError:
@@ -27,6 +29,7 @@ def split_fasta(input, output):
                 f.write(f'>{scaffold}\n{seq[1]}')
         except StopIteration:
             break
+
 
 # logging
 # sys.stderr = open(snakemake.log[0], "w")

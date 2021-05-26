@@ -20,8 +20,8 @@ rule bedtools_sort:
 
 rule bedtools:
     input:
-        samples=samples_dir_path / "{sample}.fasta",
-        gff=out_gff_merged_dir_path / "{sample}.sorted.gff"
+        gff=rules.bedtools_sort.output,
+        samples=samples_dir_path / "{sample}.fasta"
     output:
         out_bedtools_dir_path / "{sample}.fasta"
     log:
