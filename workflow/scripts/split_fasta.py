@@ -21,7 +21,7 @@ def split_fasta(input, output):
     while True:
         try:
             seq = next(seq_iter)
-            scaffold = seq[0].split(" ", 1)[0]
+            scaffold = (seq[0].split(" ", 1)[0]).replace(".", "")
             filename = f'{output}/{scaffold}.fasta'
             with open(filename, 'a') as f:
                 f.write(f'>{scaffold}\n{seq[1]}')
@@ -41,5 +41,5 @@ args = parser.parse_args()
 infilepath = args.input
 outfilepath = args.output
 
-# call spliting function for given input fasta-files
+# call splitting function for given input fasta-files
 split_fasta(infilepath, outfilepath)

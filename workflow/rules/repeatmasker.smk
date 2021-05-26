@@ -40,4 +40,4 @@ rule repeatmasker_threads:
         "RepeatMasker -species 'Saccharomyces cerevisiae' -dir {out_rm_dir_path} {input} -parallel {params.parallel} -gff -xsmall 2>&1; "
         "ex -sc '1d3|x' {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff; "
         "mv {out_rm_dir_path}/{wildcards.sample}.fasta.out.gff {output.gff}; "
-        "tar -czvf {out_rm_dir_path}/{wildcards.sample}.fasta.out.tar.gz {out_rm_dir_path}/{wildcards.sample}.fasta.out && rm {out_rm_dir_path}/{wildcards.sample}.fasta.out"
+        "pigz -c {out_rm_dir_path}/{wildcards.sample}.fasta.out > {out_rm_dir_path}/{wildcards.sample}.fasta.out.gz"

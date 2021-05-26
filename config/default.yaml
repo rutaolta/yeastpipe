@@ -28,11 +28,11 @@ samples:
 reference: "reference/cerevisiae.fasta"
 
 #---- Threads ----
+split_fasta_threads: 1
 trf_threads: 16
 trf_gff_threads: 1
 merge_gff_threads: 1
 repeatmasker_threads: 16
-split_fasta_threads: 1
 wm_counts_threads: 16
 wm_windowmasker_threads: 16
 wm_gff_threads: 1
@@ -43,11 +43,11 @@ lastal_threads: 16
 last_tar_threads: 1
 
 #---- Time ----
+split_fasta_time: "00:10:00"
 trf_time: "00:30:00"
 trf_gff_time: "00:10:00"
 merge_gff_time: "00:05:00"
 repeatmasker_time: "00:30:00"
-split_fasta_time: "00:10:00"
 wm_counts_time: "00:30:00"
 wm_windowmasker_time: "00:30:00"
 wm_gff_time: "00:10:00"
@@ -58,11 +58,11 @@ lastal_time: "00:30:00"
 last_tar_time: "00:05:00"
 
 #---- Memory ----
+split_fasta_mem_mb: 100
 trf_mem_mb: 1000
 trf_gff_mem_mb: 100
 merge_gff_mem_mb: 100
 repeatmasker_mem_mb: 1000
-split_fasta_mem_mb: 100
 wm_counts_mem_mb: 1000
 wm_windowmasker_mem_mb: 1000
 wm_gff_mem_mb: 100

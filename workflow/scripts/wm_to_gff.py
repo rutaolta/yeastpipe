@@ -36,5 +36,5 @@ args = parser.parse_args()
 infilepath = args.input
 outfilepath = args.output
 
-# call from .dat to .gff transormation function
+# call from .dat to .gff transformation function
 wm_to_gff(infilepath, outfilepath)

@@ -41,15 +41,16 @@ SAMPLES = get_scaffolds(samples_dir_path)
 
 rule all:
     input:
-        log_dir_path,
-        cluster_log_dir_path,
-        expand(out_gff_trf_dir_path / "{sample}.gff", sample=SAMPLES),
-        expand(out_gff_wm_dir_path / "{sample}.gff", sample=SAMPLES),
-        expand(out_gff_rm_dir_path / "{sample}.gff", sample=SAMPLES),
-        expand(out_gff_merged_dir_path / "{sample}.gff", sample=SAMPLES),
-        expand(out_bedtools_dir_path / "{sample}.fasta", sample=SAMPLES),
-        expand(out_lastdbal_dir_path / "{sample}.R11.maf.tar.gz", sample=SAMPLES),
-        expand(out_lastdbal_dir_path / "{sample}.R11.tab.tar.gz", sample=SAMPLES)
+        expand(
+            (
+                out_gff_trf_dir_path / "{sample}.gff"
+                out_gff_wm_dir_path / "{sample}.gff",
+                out_gff_rm_dir_path / "{sample}.gff",
+                out_gff_merged_dir_path / "{sample}.gff",
+                out_bedtools_dir_path / "{sample}.fasta",
+                out_lastdbal_dir_path / "{sample}.R11.maf.gz",
+                out_lastdbal_dir_path / "{sample}.R11.tab.gz"
+            ), sample=SAMPLES)
 
 #### load rules #####
 include: "workflow/rules/trf.smk"

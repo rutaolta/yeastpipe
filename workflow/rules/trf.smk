@@ -1,3 +1,7 @@
+import os
+
+ruleorder: split_fasta > trf > trf_gff
+
 checkpoint split_fasta:
     input:
         samples_dir_path / "{sample}.fasta"
@@ -13,7 +17,7 @@ checkpoint split_fasta:
         cpus=config["split_fasta_threads"],
         time=config["split_fasta_time"],
         mem=config["split_fasta_mem_mb"]
-    threads: 
+    threads:
         config["split_fasta_threads"]
     shell:
         "python workflow/scripts/split_fasta.py -i {input} -o {output} 2>&1"
@@ -33,7 +37,7 @@ rule trf:
         cpus=config["trf_threads"],
         time=config["trf_time"],
         mem=config["trf_mem_mb"]
-    threads: 
+    threads:
         config["trf_threads"]
     shell:
         "mkdir -p {out_trf_dir_path}/{wildcards.sample}; cd {out_trf_dir_path}/{wildcards.sample}; "
@@ -44,7 +48,7 @@ def trf_gff_input(wildcards):
     checkpoint_output = checkpoints.split_fasta.get(**wildcards).output[0]
     return expand(out_trf_dir_path / "{sample}/{scaffold}.dat",
            sample=wildcards.sample,
-           scaffold=glob_wildcards(os.path.join(checkpoint_output, "{scaffold}.dat")).scaffold)
+           scaffold=glob_wildcards(os.path.join(checkpoint_output, "{scaffold}.fasta")).scaffold)
 
 rule trf_gff:
     input:

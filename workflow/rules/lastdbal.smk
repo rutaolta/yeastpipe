@@ -2,7 +2,14 @@ rule lastdb:
     input:
         out_bedtools_dir_path / "{sample}.fasta"
     output:
-        temp(directory(out_lastdbal_dir_path / "{sample}"))
+        dir=directory(out_lastdbal_dir_path / "{sample}"),
+        bck=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.bck",
+        des=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.des",
+        prj=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.prj",
+        sds=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.sds",
+        ssp=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.ssp",
+        suf=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.suf",
+        tis=out_lastdbal_dir_path / "{sample}/YASS.R11.soft.tis"
     log:
         std=log_dir_path / "{sample}.lastdb.log",
         cluster_log=cluster_log_dir_path / "{sample}.lastdb.cluster.log",
@@ -18,7 +25,7 @@ rule lastdb:
     threads: 
         config["lastdb_threads"]
     shell:
-        "mkdir {output}; lastdb -c -R11 -P {threads} -u YASS {output}/{params.prefix} {input} 2>&1"
+        "lastdb -c -R11 -P {threads} -u YASS {output}/{params.prefix} {input} 2>&1"
 
 rule lastal:
     input:
@@ -49,8 +56,8 @@ rule last_tar:
         maf=out_lastdbal_dir_path / "{sample}.R11.maf",
         tab=out_lastdbal_dir_path / "{sample}.R11.tab"
     output:
-        maf_tar=out_lastdbal_dir_path / "{sample}.R11.maf.tar.gz",
-        tab_tar=out_lastdbal_dir_path / "{sample}.R11.tab.tar.gz"
+        maf=out_lastdbal_dir_path / "{sample}.R11.maf.gz",
+        tab=out_lastdbal_dir_path / "{sample}.R11.tab.gz"
     resources:
         cpus=config["last_tar_threads"],
         time=config["last_tar_time"],
@@ -58,5 +65,5 @@ rule last_tar:
     threads: 
         config["last_tar_threads"]
     shell:
-        "tar -czvf {output.maf_tar} {input.maf} && rm {input.maf}; "
-        "tar -czvf {output.tab_tar} {input.tab} && rm {input.tab}"
+        "pigz -c {input.maf} > {output.maf}; "
+        "pigz -c {input.tab} > {output.tab}"
