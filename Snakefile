@@ -49,7 +49,8 @@ rule all:
                 out_gff_merged_dir_path / "{sample}.gff",
                 out_bedtools_dir_path / "{sample}.fasta",
                 out_lastdbal_dir_path / "{sample}.R11.maf.gz",
-                out_lastdbal_dir_path / "{sample}.R11.tab.gz"
+                out_lastdbal_dir_path / "{sample}.R11.tab.gz",
+                "{sample}.txt"
             ), sample=SAMPLES)
 
 #### load rules #####
@@ -59,3 +60,4 @@ include: "workflow/rules/repeatmasker.smk"
 include: "workflow/rules/merge_gff.smk"
 include: "workflow/rules/bedtools.smk"
 include: "workflow/rules/lastdbal.smk"
+include: "workflow/rules/plot.smk"

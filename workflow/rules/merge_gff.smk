@@ -24,5 +24,4 @@ rule merge_gff:
         config["merge_gff_threads"]
     shell:
         "cat {input.trf} {input.wm} {input.rm} > {output}"
-
 # https://snakemake.readthedocs.io/en/stable/project_info/faq.html#can-the-output-of-a-rule-be-a-symlink
